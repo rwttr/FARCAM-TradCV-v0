@@ -109,7 +109,7 @@ cp9 = conv2(inputIMGtexture_rz,p9);
 fea_law_energy = [sumsqr(cp1) sumsqr(cp2) sumsqr(cp3) sumsqr(cp4) ...
     sumsqr(cp5) sumsqr(cp6) sumsqr(cp7) sumsqr(cp8) sumsqr(cp9)];
 
-            %tester
+
 end
 
 

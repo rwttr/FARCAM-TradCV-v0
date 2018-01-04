@@ -5,8 +5,8 @@
 %//////////////////////////////////////////////////////////////////////////////
 %no of sample
 NO_SAMPLE = 30;
-IMGPATH_BW = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\POS_bw\';
-IMGPATH_HSV3 = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\POS_hsv3\';
+IMGPATH_BW = 'Segmented Data\POS_bw\';
+IMGPATH_HSV3 = 'Segmented Data\POS_hsv3\';
 
 pos_bw_store{NO_SAMPLE,1} = zeros;
 pos_hsv3_store{NO_SAMPLE,1} = zeros;
@@ -41,8 +41,8 @@ end
 
 %//////////////////////////////////////////////////////////////////////////
 % Negative Sample
-IMGPATH_BW = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\NEG_bw\';
-IMGPATH_HSV3 = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\NEG_hsv3\';
+IMGPATH_BW = 'Segmented Data\NEG_bw\';
+IMGPATH_HSV3 = 'Segmented Data\NEG_hsv3\';
 
 EACHFILE = 4;
 

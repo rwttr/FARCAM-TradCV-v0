@@ -2,8 +2,10 @@
 % all-feature model shapeF:textFRR:textCMT:textHOG
 run_extFeature;
 run_extTestFeature;
-run_SVM;
-
+run_SVM_2;
+disp('----------------------------------------------------');
+disp('    2-Features(Texture FRR + HOG) SVM Model');
+disp('----------------------------------------------------');
 % test vector size
 nRowPos = size(test_shF_Pos,1);
 nRowNeg = size(test_shF_Neg,1);
@@ -14,56 +16,56 @@ nCol_T_HOG = size(test_teF_HOG_Pos,2);
 
 Y = test_responseVec; % from run_extTestFeature
 
-XShape(nRowPos+nRowNeg,nColShape) = zeros; %test feature row vector
-X(1:nRowPos,:) = test_shF_Pos;
-X((nRowPos+1):end,:) = test_shF_Neg;
+X(nRowPos+nRowNeg, nCol_T_FRR + nCol_T_HOG) = zeros; %test feature row vector
+X(1:nRowPos,:) = [test_teF_FRR_Pos test_teF_HOG_Pos];
+X((nRowPos+1):end,:) = [test_teF_FRR_Neg test_teF_HOG_Neg];
     
-[label_shape_L,~] = predict(SVM_Shape_linear,X);
-[label_shape_G,~] = predict(SVM_Shape_gaussian,X);
-[label_shape_P,~] = predict(SVM_4poly,X);
+[label_L,~] = predict(SVM_tFrrHog_linear,X);
+[label_G,~] = predict(SVM_tFrrHog_gaussian,X);
+[label_P,~] = predict(SVM_tFrrHog_poly,X);
 
 %------------------------------------------------------------
 %Test Score part - for each SVM Kernel
 %------------------------------------------------------------
 %True positive (Accept true samples):raw value
-Tp_4L = sum(label_L.*Y);
-Tp_4G = sum(label_G.*Y);
-Tp_4P = sum(label_P.*Y);
+Tp_L = sum(label_L.*Y);
+Tp_G = sum(label_G.*Y);
+Tp_P = sum(label_P.*Y);
 
 %True Negaitive (Reject false samples):raw value
-Tn_4L = sum(imcomplement(label_L).*imcomplement(Y));
-Tn_4G = sum(imcomplement(label_G).*imcomplement(Y));
-Tn_4P = sum(imcomplement(label_P).*imcomplement(Y));
+Tn_L = sum(imcomplement(label_L).*imcomplement(Y));
+Tn_G = sum(imcomplement(label_G).*imcomplement(Y));
+Tn_P = sum(imcomplement(label_P).*imcomplement(Y));
 
 %False Positive (Accept false samples):raw value
-Fp_4L = sum(label_L.*imcomplement(Y));
-Fp_4G = sum(label_G.*imcomplement(Y));
-Fp_4P = sum(label_P.*imcomplement(Y));
+Fp_L = sum(label_L.*imcomplement(Y));
+Fp_G = sum(label_G.*imcomplement(Y));
+Fp_P = sum(label_P.*imcomplement(Y));
 
 %False Negative (Reject true samples):raw value
-Fn_4L = sum(imcomplement(label_L).*Y);
-Fn_4G = sum(imcomplement(label_G).*Y);
-Fn_4P = sum(imcomplement(label_P).*Y);
+Fn_L = sum(imcomplement(label_L).*Y);
+Fn_G = sum(imcomplement(label_G).*Y);
+Fn_P = sum(imcomplement(label_P).*Y);
 
 % Accuracy(ACC) = (Tp+Tn)/(Tp+Tn+Fp+Fn)
-acc_linear =  (Tp_4L+Tn_4L)/(Tp_4L +Tn_4L +Fp_4L +Fn_4L);
-acc_gaussian = (Tp_4G+Tn_4G)/(Tp_4G +Tn_4G +Fp_4G +Fn_4G);
-acc_polynomial = (Tp_4P+Tn_4P)/(Tp_4P +Tn_4P +Fp_4P +Fn_4P);
+acc_linear =  (Tp_L+Tn_L)/(Tp_L +Tn_L +Fp_L +Fn_L);
+acc_gaussian = (Tp_G+Tn_G)/(Tp_G +Tn_G +Fp_G +Fn_G);
+acc_polynomial = (Tp_P+Tn_P)/(Tp_P +Tn_P +Fp_P +Fn_P);
 
 % Precision (positive predictive value (PPV)) = Tp/(Tp+Fp)
-ppv_linear = Tp_4L/(Tp_4L+Fp_4L);
-ppv_gaussian = Tp_4G/(Tp_4G+Fp_4G);
-ppv_polynomial = Tp_4P/(Tp_4P+Fp_4P);
+ppv_linear = Tp_L/(Tp_L+Fp_L);
+ppv_gaussian = Tp_G/(Tp_G+Fp_G);
+ppv_polynomial = Tp_P/(Tp_P+Fp_P);
 
 % Sensitivity, Recall, HitRate, True Positive rate = Tp/(Tp+Fn)
-sen_linear = Tp_4L/(Tp_4L+Fn_4L);
-sen_gaussian = Tp_4G/(Tp_4G+Fn_4G);
-sen_polynomial = Tp_4P/(Tp_4P+Fn_4P);
+sen_linear = Tp_L/(Tp_L+Fn_L);
+sen_gaussian = Tp_G/(Tp_G+Fn_G);
+sen_polynomial = Tp_P/(Tp_P+Fn_P);
 
 % specificity or true negative rate (TNR) = Tn/(Tn+Fp)
-spci_linear = Tn_4L/(Tn_4L+Fp_4L);
-spci_gaussian = Tn_4G/(Tn_4G+Fp_4G);
-spci_polynomial = Tn_4P/(Tn_4P+Fp_4P);
+spci_linear = Tn_L/(Tn_L+Fp_L);
+spci_gaussian = Tn_G/(Tn_G+Fp_G);
+spci_polynomial = Tn_P/(Tn_P+Fp_P);
 
 % Display Section
 disp('    Linear SVM Kernel: ');
@@ -80,4 +82,5 @@ disp('    Polynomial(3rd order) SVM Kernel: ');
 disp('Accuracy / Precision / Sensitivity / Specificity');
 disp([acc_polynomial ppv_polynomial sen_polynomial spci_polynomial]);
 disp('---------------------------------------------------');
-    
+   
+

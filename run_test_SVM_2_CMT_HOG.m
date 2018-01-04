@@ -2,8 +2,10 @@
 % all-feature model shapeF:textFRR:textCMT:textHOG
 run_extFeature;
 run_extTestFeature;
-run_SVM_1;
-disp('Single Feature(Texture:Co-occurrence Matrix) SVM Model');
+run_SVM_2;
+disp('---------------------------------------------------');
+disp('    2-Features(Texture Co-Mat + HOG) SVM Model');
+disp('---------------------------------------------------');
 % test vector size
 nRowPos = size(test_shF_Pos,1);
 nRowNeg = size(test_shF_Neg,1);
@@ -14,13 +16,13 @@ nCol_T_HOG = size(test_teF_HOG_Pos,2);
 
 Y = test_responseVec; % from run_extTestFeature
 
-XShape(nRowPos+nRowNeg,nCol_T_CMT) = zeros; %test feature row vector
-XShape(1:nRowPos,:) = test_teF_CMT_Pos;
-XShape((nRowPos+1):end,:) = test_teF_CMT_Neg;
+X(nRowPos+nRowNeg,nCol_T_CMT + nCol_T_HOG) = zeros; %test feature row vector
+X(1:nRowPos,:) = [test_teF_CMT_Pos test_teF_HOG_Pos];
+X((nRowPos+1):end,:) = [test_teF_CMT_Neg test_teF_HOG_Neg];
     
-[label_L,~] = predict(SVM_tCmt_linear,XShape);
-[label_G,~] = predict(SVM_tCmt_gauss,XShape);
-[label_P,~] = predict(SVM_tCmt_poly,XShape);
+[label_L,~] = predict(SVM_tCmtHog_linear,X);
+[label_G,~] = predict(SVM_tCmtHog_gaussian,X);
+[label_P,~] = predict(SVM_tCmtHog_poly,X);
 
 %------------------------------------------------------------
 %Test Score part - for each SVM Kernel

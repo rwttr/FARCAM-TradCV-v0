@@ -2,8 +2,10 @@
 % all-feature model shapeF:textFRR:textCMT:textHOG
 run_extFeature;
 run_extTestFeature;
-run_SVM_1;
-disp('Single Feature(Shape) SVM Model');
+run_SVM_2;
+disp('------------------------------------------------------------------');
+disp('    2-Features(Shape + Texture Co-occurrence Matrix) SVM Model');
+disp('------------------------------------------------------------------');
 % test vector size
 nRowPos = size(test_shF_Pos,1);
 nRowNeg = size(test_shF_Neg,1);
@@ -14,24 +16,24 @@ nCol_T_HOG = size(test_teF_HOG_Pos,2);
 
 Y = test_responseVec; % from run_extTestFeature
 
-XShape(nRowPos+nRowNeg,nColShape) = zeros; %test feature row vector
-XShape(1:nRowPos,:) = test_shF_Pos;
-XShape((nRowPos+1):end,:) = test_shF_Neg;
+X(nRowPos+nRowNeg,nColShape+nCol_T_CMT) = zeros; %test feature row vector
+X(1:nRowPos,:) = [test_shF_Pos test_teF_CMT_Pos];
+X((nRowPos+1):end,:) = [test_shF_Neg test_teF_CMT_Neg];
     
-[label_shape_L,~] = predict(SVM_Shape_linear,XShape);
-[label_shape_G,~] = predict(SVM_Shape_gauss,XShape);
-[label_shape_P,~] = predict(SVM_Shape_poly,XShape);
+[label_L,~] = predict(SVM_sTcmt_linear,X);
+[label_G,~] = predict(SVM_sTcmt_gaussian,X);
+[label_P,~] = predict(SVM_sTcmt_poly,X);
 
 %------------------------------------------------------------
 %Test Score part - for each SVM Kernel
 %------------------------------------------------------------
 %True positive (Accept true samples):raw value
-Tp_L = sum(label_shape_L.*Y);
-Tp_G = sum(label_shape_G.*Y);
-Tp_P = sum(label_shape_P.*Y);
+Tp_L = sum(label_L.*Y);
+Tp_G = sum(label_G.*Y);
+Tp_P = sum(label_P.*Y);
 
 %True Negaitive (Reject false samples):raw value
-Tn_L = sum(imcomplement(label_shape_L).*imcomplement(Y));
+Tn_L = sum(imcomplement(label_L).*imcomplement(Y));
 Tn_G = sum(imcomplement(label_G).*imcomplement(Y));
 Tn_P = sum(imcomplement(label_P).*imcomplement(Y));
 
@@ -80,4 +82,5 @@ disp('    Polynomial(3rd order) SVM Kernel: ');
 disp('Accuracy / Precision / Sensitivity / Specificity');
 disp([acc_polynomial ppv_polynomial sen_polynomial spci_polynomial]);
 disp('---------------------------------------------------');
-    
+   
+

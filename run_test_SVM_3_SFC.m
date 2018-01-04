@@ -2,27 +2,27 @@
 % all-feature model shapeF:textFRR:textCMT:textHOG
 run_extFeature;
 run_extTestFeature;
-run_SVM_2;
+run_SVM_3;
 disp('---------------------------------------------------');
-disp('    2-Features(Texture Co-Mat + HOG) SVM Model');
+disp('    3-Features(Shape + FRR + CMT) SVM Model');
 disp('---------------------------------------------------');
 % test vector size
 nRowPos = size(test_shF_Pos,1);
 nRowNeg = size(test_shF_Neg,1);
 nColShape =  size(test_shF_Pos,2);
-nCol_T_FRR = size(test_teF_FRR_Pos,2);
-nCol_T_CMT = size(test_teF_CMT_Pos,2);
-nCol_T_HOG = size(test_teF_HOG_Pos,2);
+nColFRR = size(test_teF_FRR_Pos,2);
+nColCMT = size(test_teF_CMT_Pos,2);
+nColHOG = size(test_teF_HOG_Pos,2);
 
 Y = test_responseVec; % from run_extTestFeature
 
-X(nRowPos+nRowNeg,nColShape+nCol_T_HOG) = zeros; %test feature row vector
-X(1:nRowPos,:) = [test_shF_Pos test_teF_HOG_Pos];
-X((nRowPos+1):end,:) = [test_shF_Neg test_teF_HOG_Neg];
+X(nRowPos+nRowNeg,nColShape+nColFRR +nColCMT) = zeros; %test feature row vector
+X(1:nRowPos,:) = [test_shF_Pos test_teF_FRR_Pos test_teF_CMT_Pos];
+X((nRowPos+1):end,:) = [test_shF_Neg test_teF_FRR_Neg test_teF_CMT_Neg];
     
-[label_L,~] = predict(SVM_sThog_linear,X);
-[label_G,~] = predict(SVM_sThog_gaussian,X);
-[label_P,~] = predict(SVM_sThog_poly,X);
+[label_L,~] = predict(SVM_sFC_linear,X);
+[label_G,~] = predict(SVM_sFC_gaussian,X);
+[label_P,~] = predict(SVM_sFC_poly,X);
 
 %------------------------------------------------------------
 %Test Score part - for each SVM Kernel

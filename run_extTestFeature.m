@@ -2,15 +2,15 @@
 %Positive Sample
 %//////////////////////////////////////////////////////////////////////////////
 %no of sample
-NO_SAMPLE = 20;
+NO_SAMPLE_test = 20;
 START_FILE_NO = 31;
 IMGPATH_BW = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\POS_bw\';
 IMGPATH_HSV3 = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\POS_hsv3\';
 
-pos_bw_store{NO_SAMPLE,1} = zeros;
-pos_hsv3_store{NO_SAMPLE,1} = zeros;
+pos_bw_store{NO_SAMPLE_test,1} = zeros;
+pos_hsv3_store{NO_SAMPLE_test,1} = zeros;
 
-for i= 1:NO_SAMPLE
+for i= 1:NO_SAMPLE_test
     IMG_dir_bw = strcat(IMGPATH_BW,'patch_bw_POS_', ...
         int2str(i+START_FILE_NO-1),'.mat');
     IMG_dir_hsv3 = strcat(IMGPATH_HSV3,'patch_hsv3_POS_', ... 
@@ -25,13 +25,13 @@ szShape = extShapeFeature(pos_bw_store{1}.patch_bw_POS);
 [szTextFrr, szTextCoMat,szTextHOG] = ...
     extTextureFeature(pos_hsv3_store{1}.patch_hsv3_POS);
 
-test_shF_Pos(NO_SAMPLE,size(szShape,2)) = zeros;
-test_teF_FRR_Pos(NO_SAMPLE,size(szTextFrr,2)) =zeros;
-test_teF_CMT_Pos(NO_SAMPLE,size(szTextCoMat,2)) =zeros;
-test_teF_HOG_Pos(NO_SAMPLE,size(szTextHOG,2)) =zeros;
+test_shF_Pos(NO_SAMPLE_test,size(szShape,2)) = zeros;
+test_teF_FRR_Pos(NO_SAMPLE_test,size(szTextFrr,2)) =zeros;
+test_teF_CMT_Pos(NO_SAMPLE_test,size(szTextCoMat,2)) =zeros;
+test_teF_HOG_Pos(NO_SAMPLE_test,size(szTextHOG,2)) =zeros;
 
 
-for i = 1:NO_SAMPLE
+for i = 1:NO_SAMPLE_test
     test_shF_Pos(i,:) = extShapeFeature(pos_bw_store{i}.patch_bw_POS);
     [test_teF_FRR_Pos(i,:), test_teF_CMT_Pos(i,:), test_teF_HOG_Pos(i,:)] = ...
         extTextureFeature(pos_hsv3_store{i}.patch_hsv3_POS);
@@ -45,10 +45,10 @@ IMGPATH_HSV3 = 'C:\Users\Rattachai\Desktop\Matlab_exp\Segmented Data\NEG_hsv3\';
 
 EACHFILE = 4;
 
-neg_bw_store{NO_SAMPLE,1} = zeros;
-neg_hsv3_store{NO_SAMPLE,1} = zeros;
+neg_bw_store{NO_SAMPLE_test,1} = zeros;
+neg_hsv3_store{NO_SAMPLE_test,1} = zeros;
 
-for i= 1:NO_SAMPLE
+for i= 1:NO_SAMPLE_test
     IMG_dir_bw = strcat(IMGPATH_BW,'patch_bw_NEG_', ...
         int2str(i+START_FILE_NO-1),'.mat');
     IMG_dir_hsv3 = strcat(IMGPATH_HSV3,'patch_hsv3_NEG_', ... 
@@ -57,14 +57,14 @@ for i= 1:NO_SAMPLE
     neg_hsv3_store{i,1} = load(IMG_dir_hsv3);
 end
 
-test_shF_Neg(NO_SAMPLE*EACHFILE,size(szShape,2)) = zeros;
-test_teF_FRR_Neg(NO_SAMPLE*EACHFILE,size(szTextFrr,2)) =zeros;
-test_teF_CMT_Neg(NO_SAMPLE*EACHFILE,size(szTextCoMat,2)) =zeros;
-test_teF_HOG_Neg(NO_SAMPLE*EACHFILE,size(szTextHOG,2)) =zeros;
+test_shF_Neg(NO_SAMPLE_test*EACHFILE,size(szShape,2)) = zeros;
+test_teF_FRR_Neg(NO_SAMPLE_test*EACHFILE,size(szTextFrr,2)) =zeros;
+test_teF_CMT_Neg(NO_SAMPLE_test*EACHFILE,size(szTextCoMat,2)) =zeros;
+test_teF_HOG_Neg(NO_SAMPLE_test*EACHFILE,size(szTextHOG,2)) =zeros;
 clear szShape szTextFrr szTextCoMat szTextHOG
 
 j = 1;
-for i = 1:NO_SAMPLE
+for i = 1:NO_SAMPLE_test
     j = 1+(4*(i-1));
     test_shF_Neg(j,:) = extShapeFeature(neg_bw_store{i}.patch_bw_NEG{1});
     test_shF_Neg(j+1,:) = extShapeFeature(neg_bw_store{i}.patch_bw_NEG{2});
@@ -83,8 +83,8 @@ for i = 1:NO_SAMPLE
 end
 
 
-test_responseVec(1:NO_SAMPLE*EACHFILE,1) = zeros;
-test_responseVec(1:NO_SAMPLE,1) = 1;
+test_responseVec(1:(NO_SAMPLE_test*EACHFILE)+NO_SAMPLE_test,1) = zeros;
+test_responseVec(1:NO_SAMPLE_test,1) = 1;
 
 clear i j IMGPATH_BW IMGPATH_HSV3 EACHFILE NO_SAMPLE neg_bw_store ...
     pos_hsv3_store neg_bw_store neg_hsv3_store IMG_dir_bw IMG_dir_hsv3 ...

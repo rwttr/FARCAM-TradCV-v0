@@ -63,11 +63,19 @@ spci_linear = Tn_4L/(Tn_4L+Fp_4L);
 spci_gaussian = Tn_4G/(Tn_4G+Fp_4G);
 spci_polynomial = Tn_4P/(Tn_4P+Fp_4P);
 
-disp('Linear SVM Kernel:');
-disp(['Accuracy = ' num2str(acc_linear)]);
-disp(['Precision = ' num2str(ppv_linear)]);
-disp(['Sensitivity/Recall = ' num2str(sen_linear)]);
-disp(['Specificity = ' num2str(spci_linear)]);
+% Display Section
+disp('    Linear SVM Kernel: ');
+disp('Accuracy / Precision / Sensitivity / Specificity');
+disp([acc_linear ppv_linear sen_linear spci_linear]);
+disp('---------------------------------------------------');
 
+disp('    Gaussian SVM Kernel: ');
+disp('Accuracy / Precision / Sensitivity / Specificity');
+disp([acc_gaussian ppv_gaussian sen_gaussian spci_gaussian]);
+disp('---------------------------------------------------');
 
-
+disp('    Polynomial(3rd order) SVM Kernel: ');
+disp('Accuracy / Precision / Sensitivity / Specificity');
+disp([acc_polynomial ppv_polynomial sen_polynomial spci_polynomial]);
+disp('---------------------------------------------------');
+    

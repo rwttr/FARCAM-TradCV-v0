@@ -12,6 +12,7 @@ subplot(1,n_region,k);
 imshowpair(patch_hsv3{k},patch_bw{k},'montage');
 end
 
+%CMD input Promt
 selector = input('Positive Cluster NO =');
 
 patch_hsv3_POS = patch_hsv3{selector};

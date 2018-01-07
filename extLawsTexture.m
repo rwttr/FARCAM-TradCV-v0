@@ -1,4 +1,4 @@
-function [fea_law_energy,fea_ed] = extTextureFeature2(I_toext_hsv3)
+function [fea_law_energy] = extLawsTexture(I_toext_hsv3)
 
 % Law's Texture energy & Edges Density texture feature
 

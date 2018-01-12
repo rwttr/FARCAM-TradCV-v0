@@ -33,12 +33,13 @@ end
 
 tic;  %Timer Start
 %   Size for initialize 
-szShape = extShapeFeature(pos_bw_store{1}.patch_bw_POS);
+szShape = extShape2(pos_bw_store{1}.patch_bw_POS,nbin,maSize);
 shapeF_POS(NO_SAMPLE,size(szShape,2)) = zeros;
 shapeF_NEG(NO_SAMPLE*EACHFILE,size(szShape,2)) = zeros;
 
 j = 1;
 accumTime = 0;
+clear i;
 for i = 1:NO_SAMPLE    
     tic;
     shapeF_POS(i,:) = extShape2(pos_bw_store{i}.patch_bw_POS,nbin,maSize); 

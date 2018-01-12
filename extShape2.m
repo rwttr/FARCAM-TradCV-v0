@@ -4,16 +4,6 @@ MOV_SMOOTH = ma_size;    % smoothing window size
 IMGRZ_WIDTH = 120;
 inputIMG =  I_toext_bw;
 
-
-
-if(ma_size == 0)
-      MOV_SMOOTH = 11; %default ma window size
-end
-if(nbin == 0)
-    nbin = 6;          %default no of bins
-end
-
-
 %{
 %inputIMG(inputIMG ==0) = -1; %background = -1
 [inputIMG_label, nfound] = bwlabeln(I_toext_bw);
@@ -82,17 +72,23 @@ dev_sig(IMGRZ_WIDTH) = dev_sig(IMGRZ_WIDTH-1);
 %{
 figure('Name','input Binary Image');
 imshow(inputIMG_shpA);
-title('Resized image');
 
 figure('Name','Resized Boundary Image');
 imshow(bdry_I);
 
+
 figure('Name','Lowest Boundary Normalized');
 plot(low_edges_norm);
-hold on;
+axis([1 120 0 1]);
+xlabel('patch width resized (pixels)') % x-axis label
+ylabel('Normalized distance') % y-axis label
+
+
+figure();
 plot(low_edges_norm_smooth);
-hold on;
-plot(dev_low_edges);
+axis([1 120 0 1]);
+xlabel('patch width resized (pixels)') % x-axis label
+ylabel('Normalized distance') % y-axis label
 %}
 
 bincell{nbin} = zeros;

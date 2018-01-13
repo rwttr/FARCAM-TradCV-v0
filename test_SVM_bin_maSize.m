@@ -5,8 +5,8 @@
 %Positive Sample
 %/////////////////////////////////////////////////////////////////////////
 %no of sample
-nbin = 60;
-maSize = 1;
+nbin = 2;
+maSize =1;
 
 [SVM_Shape_linear,~] = expSVM_Linear_Shape(nbin, maSize);
 
@@ -113,11 +113,11 @@ Tp_L = sum(label_shape_L.*Y);
 %True Negaitive (Reject false samples):raw value
 Tn_L = sum(imcomplement(label_shape_L).*imcomplement(Y));
 
-%False Positive (Accept false samples):raw value
+%False Positive (Accept false samples):raw value //real data is wrong but model
 Fp_L = sum(label_shape_L.*imcomplement(Y));
 
 %False Negative (Reject true samples):raw value
-Fn_L = sum(imcomplement(label_shape_L).*Y);
+Fn_L = sum(imcomplement(label_shape_L).*Y);     % real data is true but model reject
 
 % Accuracy(ACC) = (Tp+Tn)/(Tp+Tn+Fp+Fn)
 acc_linear =  (Tp_L+Tn_L)/(Tp_L +Tn_L +Fp_L +Fn_L);

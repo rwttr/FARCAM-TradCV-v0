@@ -90,15 +90,17 @@ axis([1 120 0 1]);
 xlabel('patch width resized (pixels)') % x-axis label
 ylabel('Normalized distance') % y-axis label
 %}
-
+bincell_distance{nbin} = zeros;
 bincell{nbin} = zeros;
 feacell(nbin*3) = zeros;
 binWidth = floor(IMGRZ_WIDTH/nbin);
 
 for j = 1:nbin
     bincell{j} = dev_sig((binWidth*(j-1)+1):(binWidth*j));
+    bincell_distance{j} = low_edges_norm_smooth((binWidth*(j-1)+1):(binWidth*j));
+    
     feacell(1+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}<0));
-    feacell(2+(3*(j-1))) = sum(bincell{j}==0);
+    feacell(2+(3*(j-1))) = mean(bincell_distance{j});
     feacell(3+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}>0));    
 end
 

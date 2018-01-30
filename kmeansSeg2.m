@@ -93,7 +93,7 @@ for i = 2:(NO_REGION+1)
 end
 
 
-I_clused_bw{length(I_label_bin),1} = []; %image patch storing cell
+I_clused_bw{length(I_label_bin),2} = []; %image patch storing cell
 I_clused_hsv3{length(I_label_bin),1} = [];
 
 for k = 1 : length(I_label_bin)
@@ -121,11 +121,12 @@ end
     BB = stats_box.BoundingBox;  
     I_toext = I_hsv3( ceil(BB(2)):(floor(BB(2))+ceil(BB(4))),...
                         ceil(BB(1)):(floor(BB(1))+ceil(BB(3))));
-    I_toext_bw = I_label_bin{k}( ceil(BB(2)):(floor(BB(2))+ceil(BB(4))),...
+    I_toext_bw = I_label_bin_each( ceil(BB(2)):(floor(BB(2))+ceil(BB(4))),...
                         ceil(BB(1)):(floor(BB(1))+ceil(BB(3))));
   
     I_clused_hsv3{k,1} = I_toext;                  
     I_clused_bw{k,1} = I_toext_bw;
+    I_clused_bw{k,2} = I_label_bin_each;
     clear stats_box I_toext I_toext_bw;
 end
 

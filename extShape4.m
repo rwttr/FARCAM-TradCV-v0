@@ -2,7 +2,9 @@ function [ feaVec ] = extShape4( I_toext_bw )
 
 % V4 - no resize image width, template matching
 % remove edges smoothing
-
+% I_toext_bw = patch_bw_POS{1};
+% I_toext_bw = patch_bw_NEG{1};
+%IMGRZ_WIDTH = 120;
 IMGRZ_WIDTH = size(I_toext_bw,2);
 inputIMG =  I_toext_bw;
 
@@ -116,17 +118,27 @@ cor30t2 = conv(low_edges_norm, fliplr(seq30_t2_norm));
 cor37t2 = conv(low_edges_norm, fliplr(seq37_t2_norm));
 cor45t2 = conv(low_edges_norm, fliplr(seq45_t2_norm));
 
-% finding area of peak allign in center of convolution result
-lower_bound = floor(0.4*length(cor30t1));
-upper_bound = ceil(0.6*length(cor30t1));
-binwidth = upper_bound - lower_bound;
+cor30t1_norm = ((cor30t1 - min(cor30t1)) ./ max(cor30t1));
+cor37t1_norm = ((cor37t1 - min(cor37t1)) ./ max(cor37t1));
+cor45t1_norm = ((cor45t1 - min(cor45t1)) ./ max(cor45t1));
 
-bankcell{1,:} = cor30t1(lower_bound:upper_bound);
-bankcell{2,:} = cor37t1(lower_bound:upper_bound);
-bankcell{3,:} = cor45t1(lower_bound:upper_bound);
-bankcell{4,:} = cor30t2(lower_bound:upper_bound);
-bankcell{5,:} = cor37t2(lower_bound:upper_bound);
-bankcell{6,:} = cor45t2(lower_bound:upper_bound);
+cor30t2_norm = ((cor30t2 - min(cor30t2)) ./ max(cor30t2));
+cor37t2_norm = ((cor37t2 - min(cor37t2)) ./ max(cor37t2));
+cor45t2_norm = ((cor45t2 - min(cor45t2)) ./ max(cor45t2));
+
+% target response
+tar30t1 = conv(seq30_t1_norm,fliplr(seq30_t1_norm));
+
+%error
+e45t1 = abs(triangle_window - cor30t1_norm);
+
+% finding area of peak allign in center of convolution result
+bankcell{1,:} = cor30t1;
+bankcell{2,:} = cor37t1;
+bankcell{3,:} = cor45t1;
+bankcell{4,:} = cor30t2;
+bankcell{5,:} = cor37t2;
+bankcell{6,:} = cor45t2;
 
 % feature vector = area of conv / patch width
 feaVec(1) = sum(bankcell{1}) / binwidth;
@@ -147,6 +159,17 @@ plot(cor37t2);
 plot(cor45t2);
 
 legend('30t1','37t1','45t1','30t2','37t2','45t2')
+
+plot(triangle_window);
+hold on;
+plot(cor30t1_norm);
+plot(cor37t1_norm);
+plot(cor45t1_norm);
+plot(cor30t2_norm);
+plot(cor37t2_norm);
+plot(cor45t2_norm);
+
+legend('target','30t1','37t1','45t1','30t2','37t2','45t2')
 %}
 end
 

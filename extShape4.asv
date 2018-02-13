@@ -1,8 +1,10 @@
-function [ feaVec, raw_point ] = extShape4( I_toext_bw )
+function [ feaVec ] = extShape4( I_toext_bw )
 
 % V4 - no resize image width, template matching
 % remove edges smoothing
-
+% I_toext_bw = patch_bw_POS{1};
+% I_toext_bw = patch_bw_NEG{1};
+%IMGRZ_WIDTH = 120;
 IMGRZ_WIDTH = size(I_toext_bw,2);
 inputIMG =  I_toext_bw;
 
@@ -116,6 +118,26 @@ cor30t2 = conv(low_edges_norm, fliplr(seq30_t2_norm));
 cor37t2 = conv(low_edges_norm, fliplr(seq37_t2_norm));
 cor45t2 = conv(low_edges_norm, fliplr(seq45_t2_norm));
 
+cor30t1_norm = ((cor30t1 - min(cor30t1)) ./ max(cor30t1));
+cor37t1_norm = ((cor37t1 - min(cor37t1)) ./ max(cor37t1));
+cor45t1_norm = ((cor45t1 - min(cor45t1)) ./ max(cor45t1));
+
+cor30t2_norm = ((cor30t2 - min(cor30t2)) ./ max(cor30t2));
+cor37t2_norm = ((cor37t2 - min(cor37t2)) ./ max(cor37t2));
+cor45t2_norm = ((cor45t2 - min(cor45t2)) ./ max(cor45t2));
+
+% target response
+triangle_window(1:length(cor30t1)) = zeros;
+triangle_half= floor(length(cor30t1) /2);
+for i = 1:triangle_half
+    triangle_window(i) = (i-1)/triangle_half;
+    triangle_window(i+triangle_half) = 1 - ((i-1)/triangle_half);
+end
+
+%error
+e45t1 = abs(triangle_window - cor30t1_norm);
+
+% finding area of peak allign in center of convolution result
 bankcell{1,:} = cor30t1;
 bankcell{2,:} = cor37t1;
 bankcell{3,:} = cor45t1;
@@ -123,13 +145,15 @@ bankcell{4,:} = cor30t2;
 bankcell{5,:} = cor37t2;
 bankcell{6,:} = cor45t2;
 
+% feature vector = area of conv / patch width
+feaVec(1) = sum(bankcell{1}) / binwidth;
+feaVec(2) = sum(bankcell{2}) / binwidth;
+feaVec(3) = sum(bankcell{3}) / binwidth;
+feaVec(4) = sum(bankcell{4}) / binwidth;
+feaVec(5) = sum(bankcell{5}) / binwidth;
+feaVec(6) = sum(bankcell{6}) / binwidth;
 
-feaVec(1) =sum(bankcell{1}) / IMGRZ_WIDTH;
-sum(bankcell{2}) / IMGRZ_WIDTH;
-sum(bankcell{3}) / IMGRZ_WIDTH;
-sum(bankcell{4}) / IMGRZ_WIDTH;
-sum(bankcell{5}) / IMGRZ_WIDTH;
-sum(bankcell{6}) / IMGRZ_WIDTH;
+
 %{
 plot(cor30t1);
 hold on;
@@ -140,6 +164,17 @@ plot(cor37t2);
 plot(cor45t2);
 
 legend('30t1','37t1','45t1','30t2','37t2','45t2')
+
+plot(triangle_window);
+hold on;
+plot(cor30t1_norm);
+plot(cor37t1_norm);
+plot(cor45t1_norm);
+plot(cor30t2_norm);
+plot(cor37t2_norm);
+plot(cor45t2_norm);
+
+legend('target','30t1','37t1','45t1','30t2','37t2','45t2')
 %}
 end
 

@@ -1,4 +1,4 @@
-function [ shapeFeature ] = extShape3( I_toext_bw, nbin, ma_size )
+function [ shapeFeature, raw_point ] = extShape3( I_toext_bw, nbin, ma_size )
 
 % V3 - no resize image width
 
@@ -73,7 +73,7 @@ dev_sig = dev_low_edges;
 dev_sig(IMGRZ_WIDTH) = dev_sig(IMGRZ_WIDTH-1);
 %Display Section
 
-
+%{
 figure('Name','input Binary Image');
 imshow(inputIMG_shpA);
 
@@ -108,7 +108,7 @@ for j = 1:nbin
     feacell(2+(3*(j-1))) = mean(bincell_distance{j});
     feacell(3+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}>0));    
 end
-
+raw_point = low_edges_norm_smooth;
 shapeFeature = feacell;
 
 end

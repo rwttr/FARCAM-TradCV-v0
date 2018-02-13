@@ -1,6 +1,8 @@
 function [I_clused_hsv3,I_clused_bw,ctrdVal,nfound] = ...
          kmeansSeg2(IMG_DIR,IMG_NO,NO_REGION)
 
+% add erosion   
+     
 % 1
 %Threshold intensity channel
 %NO_REGION = 4;
@@ -72,7 +74,7 @@ I_ic = I_k_filt.*I_hsv3 ;
 %   Connected Component Labelling
 %   --------------------------------
 %   Pick n biggest area(mode) then create sq.bounding box
-%NO_REGION = NO_REGION+1;       % No. of Biggest area +1 include BG
+%   NO_REGION = NO_REGION+1;       % No. of Biggest area +1 include BG
 mode_I_ic(NO_REGION+1) = zeros; % mode value storage (+1 incld BG)
 [I_label, nfound] = bwlabeln(I_ic);
 I_ic_vector = reshape(I_label,1,[]);

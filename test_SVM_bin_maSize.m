@@ -11,9 +11,6 @@ maSize =1;
 [SVM_Shape_linear,~] = expSVM_Linear_Shape(nbin, maSize);
 
 
-
-
-
 NO_SAMPLE_test = 20;
 START_FILE_NO = 31;
 IMGPATH_BW = 'Segmented Data\POS_bw\';

@@ -32,8 +32,8 @@
 
 function w=window2(N,M,w_func)
 
-wc=window(w_func,N);
-wr=window(w_func,M);
+wc=window(w_func,N,30);
+wr=window(w_func,M,30);
 [maskr,maskc]=meshgrid(wr,wc);
 
 %maskc=repmat(wc,1,M); Old version

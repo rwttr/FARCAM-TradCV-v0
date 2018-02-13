@@ -1,4 +1,4 @@
-function [ shapeFeature ] = extShape2( I_toext_bw, nbin, ma_size )
+function [ shapeFeature, raw_point ] = extShape2( I_toext_bw, nbin, ma_size )
 
 MOV_SMOOTH = ma_size;    % smoothing window size
 IMGRZ_WIDTH = 120;
@@ -103,7 +103,7 @@ for j = 1:nbin
     feacell(2+(3*(j-1))) = mean(bincell_distance{j});
     feacell(3+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}>0));    
 end
-
+raw_point = low_edges_norm_smooth;
 shapeFeature = feacell;
 
 end

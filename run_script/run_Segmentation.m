@@ -2,7 +2,7 @@
 IMG_dir = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_resize1\';
 n_region = 5;
 
-image_k = 50; %image_no
+image_k = 1; %image_no
 
 [patch_hsv3,patch_bw,ctVal,~] = kmeansSegment(IMG_dir,image_k,n_region);
 

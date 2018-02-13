@@ -1,9 +1,9 @@
 
 
-wavelength = [2 16];
+wavelength = [4 16];
 orientation = [0 45 90];
 
-g = gabor(wavelength,orientation);
+g = gabor(wavelength,orientation,'SpatialFrequencyBandwidth',2.5);
 
 
 for p = 1:length(g)
@@ -14,8 +14,7 @@ for p = 1:length(g)
     title(sprintf('Re[h(x,y)], \\lambda = %d, \\theta = %d',lambda,theta));
 end
 
-test = g(2).SpatialKernel;
-imagesc(real(test));
+imagesc(abs(fft2(test)));
 
 
 outMag = imgaborfilt(I_smooth{1},g);

@@ -117,7 +117,7 @@ cor45t1 = conv(low_edges_norm, fliplr(seq45_t1_norm));
 cor30t2 = conv(low_edges_norm, fliplr(seq30_t2_norm));
 cor37t2 = conv(low_edges_norm, fliplr(seq37_t2_norm));
 cor45t2 = conv(low_edges_norm, fliplr(seq45_t2_norm));
-
+%{
 cor30t1_norm = ((cor30t1 - min(cor30t1)) ./ max(cor30t1));
 cor37t1_norm = ((cor37t1 - min(cor37t1)) ./ max(cor37t1));
 cor45t1_norm = ((cor45t1 - min(cor45t1)) ./ max(cor45t1));
@@ -125,17 +125,24 @@ cor45t1_norm = ((cor45t1 - min(cor45t1)) ./ max(cor45t1));
 cor30t2_norm = ((cor30t2 - min(cor30t2)) ./ max(cor30t2));
 cor37t2_norm = ((cor37t2 - min(cor37t2)) ./ max(cor37t2));
 cor45t2_norm = ((cor45t2 - min(cor45t2)) ./ max(cor45t2));
-
+%}
 % target response
-triangle_window(1:length(cor30t1)) = zeros;
-triangle_half= floor(length(cor30t1) /2);
-for i = 1:triangle_half
-    triangle_window(i) = (i-1)/triangle_half;
-    triangle_window(i+triangle_half) = 1 - ((i-1)/triangle_half);
-end
+tar30t1 = conv(seq30_t1_norm,fliplr(seq30_t1_norm));
+tar37t1 = conv(seq37_t1_norm,fliplr(seq37_t1_norm));
+tar45t1 = conv(seq45_t1_norm,fliplr(seq45_t1_norm));
+
+tar30t2 = conv(seq30_t2_norm,fliplr(seq30_t2_norm));
+tar37t2 = conv(seq37_t2_norm,fliplr(seq37_t2_norm));
+tar45t2 = conv(seq45_t2_norm,fliplr(seq45_t2_norm));
 
 %error
-e45t1 = abs(triangle_window - cor30t1_norm);
+e30t1 = abs(tar30t1 - cor30t1);
+e37t1 = abs(tar37t1 - cor37t1);
+e45t1 = abs(tar45t1 - cor45t1);
+
+e30t2 = abs(tar30t2 - cor30t2);
+e37t2 = abs(tar37t2 - cor37t2);
+e45t2 = abs(tar45t2 - cor45t2);
 
 % finding area of peak allign in center of convolution result
 bankcell{1,:} = cor30t1;

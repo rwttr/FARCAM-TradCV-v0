@@ -1,8 +1,6 @@
 
 %{ 
         read all image patches
-
-
 NO_FILE = 50;
 IMGPATH_BW = 'Seg2 Data\POS_bw\';
 IMGPATH_HSV3 = 'Seg2 Data\POS_hsv3\';
@@ -63,6 +61,15 @@ for k = 1:6
     subplot(3,6,k); imshow(I_smooth{k});
     subplot(3,6,k+6); imagesc(Gmag{k});   % Gradient Magnitude
     subplot(3,6,k+12); imagesc(abs(fftshift(fou_I{k}))); % Gradient Direction
+    
+end
+
+figure('Name','ColorPatch + Intensity Sobel Edges');
+for k = 1:50
+    I_smooth = imgaussfilt(imgcell_hsv3{k},3);
+    [Gmag,Gdir_smooth] = imgradient(I_smooth);
+    subplot(5,10,k); 
+    imshowpair(imgcell_bw{k},Gmag,'montage');
     
 end
 

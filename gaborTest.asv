@@ -1,5 +1,5 @@
 
-wavelength = [8 12 16 24 32];
+wavelength = [8 12 16 24];
 orientation = [0 30 45 60 90];
 
 g = gabor(wavelength,orientation);
@@ -34,9 +34,9 @@ imagesc(abs(fftshift(ftest4)));
 imagesc(abs(fftshift(ftest1)));
 %}
 
-outMag = imgaborfilt(imgcell_hsv3{3},g);
-for i = 1:length(g)
-    subplot(5,5,i); imagesc(outMag(:,:,i).*imgcell_bw{3});
+outMag = imgaborfilt(imgcell_hsv3{7},g);
+for i = 1:length(gBank)
+    subplot(3,4,i); imagesc(outMag(:,:,i).*I_xt_bw);
 end
 
 

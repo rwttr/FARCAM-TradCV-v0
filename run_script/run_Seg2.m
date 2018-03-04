@@ -1,8 +1,8 @@
 
-IMG_dir = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_resize1\';
+IMG_dir = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_600x800\';
 n_region = 5;
 
-image_k = 45; %image_no
+image_k = 80; %image_no
 
 [patch_hsv3,patch_bw,ctVal,~] = kmeansSeg2(IMG_dir,image_k,n_region);
 
@@ -35,7 +35,7 @@ for i = 1:n_region
 end
 inner_counter = 1;
 
-DATA_DIR = 'C:\Users\Rattachai\Desktop\Matlab_exp\Seg2 Data\';
+DATA_DIR = 'C:\Users\Rattachai\Desktop\Matlab_exp\patch_nexus_600x800_L1\';
 filename_POSpatch_hsv3 = strcat(DATA_DIR,'POS_hsv3\patch_hsv3_POS_',int2str(image_k));
 filename_NEGpatch_hsv3 = strcat(DATA_DIR,'NEG_hsv3\patch_hsv3_NEG_',int2str(image_k));
 filename_POSpatch_bw = strcat(DATA_DIR,'POS_bw\patch_bw_POS_',int2str(image_k));

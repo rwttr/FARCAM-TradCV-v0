@@ -8,7 +8,7 @@ function [ feaVec ] = extShp5Gabor( I_xt_hsv3,I_xt_bw )
 TARGET_LEN = 500; % length of source image (1MP)
 IMGRZ_WIDTH = size(I_xt_bw,2);
 
-WAVELENGTH = [8 16 24 32];
+WAVELENGTH = [8 12 16 24 30];
 ORIENTATION = [0 30 45 60 90];
 
 gBank = gabor(WAVELENGTH,ORIENTATION);

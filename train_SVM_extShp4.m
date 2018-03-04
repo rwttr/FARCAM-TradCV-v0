@@ -1,11 +1,11 @@
 function [SVM_Model,tExtract] = train_SVM_extShp4
 
 % Training Part
-NO_SAMPLE = 30;
+NO_SAMPLE = 52;
 EACHFILE = 4; %negative sample per file
 
-IMGPATH_POS_BW = 'Seg2 Data\POS_bw\';
-IMGPATH_NEG_BW = 'Seg2 Data\NEG_bw\';
+IMGPATH_POS_BW = 'patch_nexus_600x800_L1\POS_bw\';
+IMGPATH_NEG_BW = 'patch_nexus_600x800_L1\NEG_bw\';
 
 
 %load image patch from files store in pos_bw_store/pos_hsv3_store column cell
@@ -27,7 +27,7 @@ end
 
 tic;  %Timer Start
 %   Size for initialize 
-szShape = extShape4(pos_bw_store{1}.patch_bw_POS{1});
+szShape = extShape3(pos_bw_store{1}.patch_bw_POS{1},5,3);
 fea_POS(NO_SAMPLE,length(szShape)) = zeros;
 fea_NEG(NO_SAMPLE*EACHFILE,length(szShape)) = zeros;
 
@@ -36,13 +36,13 @@ accumTime = 0;
 clear i;
 for i = 1:NO_SAMPLE    
     tic;
-    fea_POS(i,:) = extShape4(pos_bw_store{i}.patch_bw_POS{1}); 
+    fea_POS(i,:) = extShape3(pos_bw_store{i}.patch_bw_POS{1},5,3); 
     
     j = 1+(4*(i-1));
-    fea_NEG(j,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{1});
-    fea_NEG(j+1,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{2});
-    fea_NEG(j+2,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{3});
-    fea_NEG(j+3,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{4});
+    fea_NEG(j,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{1},5,3);
+    fea_NEG(j+1,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{2},5,3);
+    fea_NEG(j+2,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{3},5,3);
+    fea_NEG(j+3,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{4},5,3);
 end
 
 tExtract = accumTime/NO_SAMPLE; % timer stop (feature extract)

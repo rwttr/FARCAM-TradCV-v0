@@ -10,13 +10,13 @@
 
 
 % trained model
-[SVM_model,~] = train_SVM_extShp4();
+%[SVM_model,~] = train_SVM_extShp4();
 
 
-NO_SAMPLE_test = 20; %no of sample
-START_FILE_NO = 31;
-IMGPATH_BW = 'Seg2 Data\POS_bw\';
-IMGPATH_HSV3 = 'Seg2 Data\POS_hsv3\';
+NO_SAMPLE_test = 50; %no of sample
+START_FILE_NO = 53;
+IMGPATH_BW = 'patch_nexus_600x800_L1\POS_bw\';
+IMGPATH_HSV3 = 'patch_nexus_600x800_L1\POS_hsv3\';
 
 pos_bw_store{NO_SAMPLE_test,1} = zeros;
 pos_hsv3_store{NO_SAMPLE_test,1} = zeros;
@@ -32,17 +32,17 @@ end
 
 % extract shape feature
 % size for initialize 
-szShape = extShape4(pos_bw_store{1}.patch_bw_POS{1});
+szShape = extShape3(pos_bw_store{1}.patch_bw_POS{1},5,3);
 test_fea_Pos(NO_SAMPLE_test,length(szShape)) = zeros;
 
 for i = 1:NO_SAMPLE_test
-    test_fea_Pos(i,:) = extShape4(pos_bw_store{i}.patch_bw_POS{1});        
+    test_fea_Pos(i,:) = extShape3(pos_bw_store{i}.patch_bw_POS{1},5,3);        
 end
 
 %//////////////////////////////////////////////////////////////////////////
 % Negative Sample
-IMGPATH_BW = 'Seg2 Data\NEG_bw\';
-IMGPATH_HSV3 = 'Seg2 Data\NEG_hsv3\';
+IMGPATH_BW = 'patch_nexus_600x800_L1\NEG_bw\';
+IMGPATH_HSV3 = 'patch_nexus_600x800_L1\NEG_hsv3\';
 
 EACHFILE = 4;
 
@@ -63,10 +63,10 @@ test_fea_Neg(NO_SAMPLE_test*EACHFILE,size(szShape,2)) = zeros;
 j = 1;
 for i = 1:NO_SAMPLE_test
     j = 1+(4*(i-1));
-    test_fea_Neg(j,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{1});
-    test_fea_Neg(j+1,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{2});
-    test_fea_Neg(j+2,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{3});
-    test_fea_Neg(j+3,:) = extShape4(neg_bw_store{i}.patch_bw_NEG{4});
+    test_fea_Neg(j,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{1},5,3);
+    test_fea_Neg(j+1,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{2},5,3);
+    test_fea_Neg(j+2,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{3},5,3);
+    test_fea_Neg(j+3,:) = extShape3(neg_bw_store{i}.patch_bw_NEG{4},5,3);
            
 end
 

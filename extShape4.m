@@ -1,4 +1,4 @@
-function [ feaVec ] = extShape4( I_toext_bw )
+function [ feaVec, low_edges ] = extShape4( I_toext_bw )
 
 % V4 - no resize image width, template matching
 % remove edges smoothing

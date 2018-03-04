@@ -1,10 +1,10 @@
-function [ shapeFeature, raw_point ] = extShape3( I_toext_bw, nbin, ma_size )
+function [ shapeFeature, le_trim ] = extShape3( I_toext_bw, nbin, ma_size )
 
 % V3 - no resize image width
 
 
 MOV_SMOOTH = ma_size;    % smoothing window size
-%IMGRZ_WIDTH = 120;
+%IMGRZ_WIDTH = 100;
 IMGRZ_WIDTH = size(I_toext_bw,2);
 inputIMG =  I_toext_bw;
 
@@ -61,8 +61,10 @@ for c = 1:ncols
 end
 
 % Normailize Magnitude to be in [0,1] range 
-low_edges_norm = low_edges - min(low_edges(:));
-low_edges_norm = low_edges_norm ./ max(low_edges_norm(:));
+%low_edges_norm = low_edges - min(low_edges(:));
+%low_edges_norm = low_edges_norm ./ max(low_edges_norm(:));
+% turnoff
+low_edges_norm = low_edges;
 
 % Smooth by moving average filter
 low_edges_norm_smooth = movmean(low_edges_norm,MOV_SMOOTH);
@@ -71,6 +73,7 @@ low_edges_norm_smooth = movmean(low_edges_norm,MOV_SMOOTH);
 dev_low_edges = diff(low_edges_norm_smooth);
 dev_sig = dev_low_edges;
 dev_sig(IMGRZ_WIDTH) = dev_sig(IMGRZ_WIDTH-1);
+
 %Display Section
 
 %{
@@ -95,21 +98,25 @@ xlabel('patch width resized (pixels)') % x-axis label
 ylabel('Normalized distance') % y-axis label
 %}
 
-bincell_distance{nbin} = zeros;
-bincell{nbin} = zeros;
-feacell(nbin*3) = zeros;
+bincell_distance{nbin-2} = zeros;
+bincell{nbin-2} = zeros;
+feacell((nbin-2)*3) = zeros;
 binWidth = floor(IMGRZ_WIDTH/nbin);
 
-for j = 1:nbin
-    bincell{j} = dev_sig((binWidth*(j-1)+1):(binWidth*j));
-    bincell_distance{j} = low_edges_norm_smooth((binWidth*(j-1)+1):(binWidth*j));
+for j = 2:(nbin-1)
+    bincell{j} = dev_sig( (binWidth*(j-1)):(binWidth*j) );
+    bincell_distance{j} = low_edges_norm_smooth( (binWidth*(j-1)):(binWidth*j) );
     
-    feacell(1+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}<0));
-    feacell(2+(3*(j-1))) = mean(bincell_distance{j});
-    feacell(3+(3*(j-1))) = 100*sum(bincell{j}(bincell{j}>0));    
+    feacell(1+(3*(j-2))) = mean(bincell_distance{j});
+    feacell(2+(3*(j-2))) = sum(bincell{j}(bincell{j}<0))/binWidth;
+    feacell(3+(3*(j-2))) = sum(bincell{j}(bincell{j}>0))/binWidth;    
 end
-raw_point = low_edges_norm_smooth;
+%raw_le = low_edges;
+le_trim = low_edges(binWidth:end-binWidth);
+%raw_point = low_edges_norm_smooth;
 shapeFeature = feacell;
+%raw2 = low_edges_norm_smooth(1+binWidth:end-binWidth);
+
 
 end
 

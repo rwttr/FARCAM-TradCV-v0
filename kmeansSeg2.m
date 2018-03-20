@@ -5,10 +5,10 @@ function [I_clused_hsv3,I_clused_bw,ctrdVal,nfound] = ...
      
 % 1
 %Threshold intensity channel
-%NO_REGION = 4;
-%IMG_NO = 4;
+NO_REGION = 10;
+IMG_NO = 4;
 END_TY = '.jpg';
-%IMG_DIR = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_resize1\';
+IMG_DIR = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\demo_L1_resize1\';
 IMGPATH = strcat(IMG_DIR,int2str(IMG_NO),END_TY);
 
 I_rgb = imread(IMGPATH);
@@ -65,7 +65,7 @@ end
 SELECT_CLUSTER = 2;
 
 %Apply median filter : I_k_filt
-I_k_filt = medfilt2(I_kresult(:,:,SELECT_CLUSTER), [3 3]);
+I_k_filt = medfilt2(I_kresult(:,:,SELECT_CLUSTER), [5 5]);
 I_ic = I_k_filt.*I_hsv3 ;
 
 %imshowpair(I_kresult(:,:,SELECT_CLUSTER),I_k_filt,'montage');
@@ -94,6 +94,11 @@ for i = 2:(NO_REGION+1)
     I_label_bin{i-1} = temp;        % single patch, not collected patch
 end
 
+%area-ranked image 
+I_ranked = I_ic.*0;
+for i = 1:length(I_label_bin)
+   I_ranked = I_ranked + I_label_bin{i}; 
+end
 
 I_clused_bw{length(I_label_bin),2} = []; %image patch storing cell
 I_clused_hsv3{length(I_label_bin),1} = [];

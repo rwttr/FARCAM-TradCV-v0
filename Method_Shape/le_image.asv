@@ -1,0 +1,35 @@
+function [ s ] = le_image( inputIMG_shpA )
+%LE_IMAGE Summary of this function goes here
+%   Low_edges Extraction
+bdry_idx = bwboundaries(inputIMG_shpA,'noholes');
+bdry_I = imbinarize(inputIMG_shpA.*0);
+idx_x = bdry_idx{1,1}(:,1);
+idx_y = bdry_idx{1,1}(:,2);
+
+for c = 1:length(idx_x)
+    bdry_I(idx_x(c),idx_y(c)) = 1;
+end
+
+%(inverse projection)lowest edges(of perimeter) onto image bottom (x-axis)
+% last element of low_rowedges always = 1 (no boundary in bdry_I)
+rowVal = 0;
+[nrows,ncols] = size(bdry_I);
+%ncols = ncols-1;
+
+low_edges(1:(IMGRZ_WIDTH-1)) = 0;
+for c = 1:ncols
+    rowVal = 0;
+    for row = 1:nrows    
+        if(bdry_I(row,c)==1)
+            if(row>=rowVal)
+                rowVal = row;
+            end
+        end        
+    end       
+    low_edges(c) = nrows-rowVal;
+    rowVal = 0;
+end
+
+
+end
+

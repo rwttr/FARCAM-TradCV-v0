@@ -1,9 +1,9 @@
 % add erosion   
-function [I_le_segmented] = kmeansSeg2(IMG_NO,IMG_DIR)    
+function [I_le_segmented_mode] = kmeansSeg2(IMG_NO,IMG_DIR)    
 % 1
 %Threshold intensity channel
 NO_REGION = 10;
-%IMG_NO = 44;
+%IMG_NO = 53;
 %IMG_DIR = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_600x800\';
 IMGPATH = strcat(IMG_DIR,int2str(IMG_NO),'.jpg');
 
@@ -14,12 +14,19 @@ I_hsv3 = I_hsv(:,:,3); % Value
 
 th_level = graythresh(I_hsv3);
 I_hsv3_thresh = imbinarize(I_hsv3,th_level);
-I_hsv3_thresh_d = double(I_hsv3_thresh);
+
+% remove smaller region (keep only tree region
+noOfOne = ceil(sum(sum(I_hsv3_thresh))/3);
+I_tree = bwareaopen(I_hsv3_thresh,noOfOne);
+clear noOfOne
+
+%I_hsv3_thresh_d = double(I_hsv3_thresh);
+I_hsv3_thresh_d = double(I_tree);
 I_hsv3_thresh_d(I_hsv3_thresh_d == 0) = -1;
 
 %figure('Name','Input Intensity Image - Thresholded Image');
 %imshowpair(I_hsv3,I_hsv3_thresh,'montage');
-
+%I_hsv1_smooth = imgaussfilt(I_hsv1,0.1);
 I_mask1 = I_hsv3_thresh_d.*I_hsv1;  %Hue image && Foreground            
 I_mask1(I_mask1 <= 0) = -1;
 
@@ -97,7 +104,7 @@ end
 
 % Gabor
 I_hsv3_smooth = imgaussfilt(I_hsv3,0.25);
-wavelength = [12 20];
+wavelength = [16 20 24];
 orientation = [30 45 60];
 gBank = gabor(wavelength,orientation);
 [mag, ~] = imgaborfilt(I_hsv3_smooth,gBank);
@@ -181,7 +188,7 @@ end
 
 % Region Boundary
 for i = 1:length(I_label_bin)
-    [I_le{i}, ~] = le_image2(I_patch{i});
+    [I_le{i}, ~] = le_image3(I_patch{i});
 end
 
 I_le_mag{NO_REGION,length(gBank)} = [];
@@ -198,6 +205,40 @@ clear noOfOne
 value_le = sum(value_mat_le,2);
 [~, maxidx] = max(value_le);
 I_le_segmented = I_le{maxidx}+ (0.3.*I_hsv3_smooth);
+
+
+%--------------------------------------------------------------------------
+% Vote (Mode) Maximum of sum by Rattachai.W (Low_edges)
+%--------------------------------------------------------------------------
+I_patch{length(I_label_bin)} = [];
+I_le{length(I_label_bin)} = [];
+for k = 1 : length(I_label_bin)
+    I_label_bin_each = imbinarize(I_label_bin{k});  
+    I_patch{k} = I_label_bin_each;    
+end
+
+% Region Boundary
+for i = 1:length(I_label_bin)
+    [I_le{i}, ~] = le_image(I_patch{i});
+end
+
+I_le_mag{NO_REGION,length(gBank)} = [];
+value_mat_le(NO_REGION,length(gBank)) = zeros; % single response 
+noOfOne = 1;
+for i = 1:length(I_label_bin)
+    for j =  1:length(gBank)
+        I_le_mag{i,j} = gMag_norm{j}.*I_le{i};
+        noOfOne = sum(sum(I_le{i}));
+        value_mat_le(i,j) = ((sum(sum(I_le_mag{i,j})))/noOfOne);
+    end
+end
+clear noOfOne
+
+
+
+[~, maxresponse] = max(value_mat_le,[],1);
+outputMask = intSeg2( IMG_NO, IMG_DIR );
+I_le_segmented_mode = (outputMask.*I_le{mode(maxresponse)})+ (0.3.*I_hsv3_smooth);
 
 
 end

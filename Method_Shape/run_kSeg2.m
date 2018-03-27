@@ -2,7 +2,7 @@
 %IMG_NO = 44;
 IMG_DIR = 'C:\Users\Rattachai\Desktop\Image Acquisition 2\nexus\L1_600x800\';
 
-SAVE_DIR = 'C:\Users\Rattachai\Desktop\ShpAna2\seg2_gabor_color_le2_maxSum';
+SAVE_DIR = 'C:\Users\Rattachai\Desktop\ShpAna2\segMix_gabor162024_color_le_Vote_singleROI_gabor55_zeroTH';
 
 
 
